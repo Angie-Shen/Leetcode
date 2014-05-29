@@ -8,8 +8,74 @@ Your algorithm should have a linear runtime complexity. Could you implement it w
 The requirement is O(n) time and O(1) space.
 Thus, both "first sort and then find" (time complexity) and "hash map" (space complexity) are not working.
 
-We still use bit operation. The computer stores numbers in binary format. According to the question, only one of the numbers appears once. 
-Thus, if we calculate the sum of ith bit of all the numbers and then modulo 3, the result could be only 0 or 1. 
-把数字全部用二进制表示，对第ith位上所有数字的和对3取余，只会有两个结果0或1. 将取余的结果整合就是那个single number.
+To solve this problem using only constant space, you have to rethink how the numbers are being represented in computers -- using bits.
 
+If you sum the ith bit of all numbers and mod 3, it must be either 0 or 1 due to the constraint of this problem 
+where each number must appear either three times or once. This will be the ith bit of that "single number".
+把数字全部用二进制表示，对第ith位上所有数字的和对3取余，只会有两个结果0或1. 取余的结果就是single number的第ith位.
+
+A straightforward implementation is to use an array of size 32 to keep track of the total count of ith bit. 
 一个直接的实现就是用大小为32的数组来记录所有位上的和。
+
+Reference:	http://www.acmerblog.com/leetcode-single-number-ii-5394.html
+			https://oj.leetcode.com/discuss/857/constant-space-solution
+
+解法1：
+int singleNumber(int A[], int n) {
+	int count[32] = {0};
+    int result = 0;
+	for (int i = 0; i < 32; i++) {
+		for (int j = 0; j < n; j++) {
+			if ((A[j] >> i) & 1) {
+				count[i]++;
+			}
+		}
+		result |= ((count[i] % 3) << i);
+	}
+	return result;
+}
+
+We can improve this based on the previous solution using three bitmask variables:
+
+    ones as a bitmask to represent the ith bit had appeared once.
+    twos as a bitmask to represent the ith bit had appeared twice.
+    threes as a bitmask to represent the ith bit had appeared three times.
+
+When the ith bit had appeared for the third time, clear the ith bit of both ones and twos to 0. The final answer will be the value of ones.
+
+这个算法是有改进的空间的，可以使用掩码变量：
+
+    ones   	代表第ith 位只出现一次的掩码变量
+    twos	代表第ith 位只出现两次次的掩码变量
+    threes  代表第ith 位只出现三次的掩码变量
+
+假设在数组的开头连续出现3次5，则变化如下：
+01	ones = 101
+02	twos = 0
+03	threes = 0
+04	--------------
+05	ones = 0
+06	twos = 101
+07	threes = 0
+08	--------------
+09	ones = 0
+10	twos = 0
+11	threes = 101
+12	--------------
+
+当第ith位出现3次时，我们就将ones和twos的第ith位设置为0. 最终的答案就是ones。
+
+解法2：
+01	int singleNumber(int A[], int n) {
+02	    int ones = 0, twos = 0, threes = 0;
+03	    for (int i = 0; i < n; i++) {
+04	        twos |= ones & A[i];
+05	        ones ^= A[i];		//异或3次和异或1次的结果是一样的
+
+06	       	//对于ones和twos把出现了3次的位置设置为0（取反之后1的位置为0）
+07	        threes = ones & twos;
+08	        ones &= ~threes;
+09	        twos &= ~threes;
+10	    }
+11	    return ones;
+12	}
