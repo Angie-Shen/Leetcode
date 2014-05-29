@@ -50,32 +50,32 @@ When the ith bit had appeared for the third time, clear the ith bit of both ones
     threes  代表第ith 位只出现三次的掩码变量
 
 假设在数组的开头连续出现3次5，则变化如下：
-01	ones = 101
-02	twos = 0
-03	threes = 0
-04	--------------
-05	ones = 0
-06	twos = 101
-07	threes = 0
-08	--------------
-09	ones = 0
-10	twos = 0
-11	threes = 101
-12	--------------
+	ones = 101
+	twos = 0
+	threes = 0
+	--------------
+	ones = 0
+	twos = 101
+	threes = 0
+	--------------
+	ones = 0
+	twos = 0
+	threes = 101
+	--------------
 
 当第ith位出现3次时，我们就将ones和twos的第ith位设置为0. 最终的答案就是ones。
 
 解法2：
-01	int singleNumber(int A[], int n) {
-02	    int ones = 0, twos = 0, threes = 0;
-03	    for (int i = 0; i < n; i++) {
-04	        twos |= ones & A[i];
-05	        ones ^= A[i];		//异或3次和异或1次的结果是一样的
+	int singleNumber(int A[], int n) {
+	    int ones = 0, twos = 0, threes = 0;
+	    for (int i = 0; i < n; i++) {
+	        twos |= ones & A[i];
+	        ones ^= A[i];		//异或3次和异或1次的结果是一样的
 
-06	       	//对于ones和twos把出现了3次的位置设置为0（取反之后1的位置为0）
-07	        threes = ones & twos;
-08	        ones &= ~threes;
-09	        twos &= ~threes;
-10	    }
-11	    return ones;
-12	}
+	       	//对于ones和twos把出现了3次的位置设置为0（取反之后1的位置为0）
+	        threes = ones & twos;
+	        ones &= ~threes;
+	        twos &= ~threes;
+	    }
+	    return ones;
+	}
