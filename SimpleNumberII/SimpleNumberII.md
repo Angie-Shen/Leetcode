@@ -69,10 +69,10 @@ When the ith bit had appeared for the third time, clear the ith bit of both ones
 	int singleNumber(int A[], int n) {
 	    int ones = 0, twos = 0, threes = 0;
 	    for (int i = 0; i < n; i++) {
-	        twos |= ones & A[i];
-	        ones ^= A[i];		//异或3次和异或1次的结果是一样的
+			twos |= ones & A[i];
+			ones ^= A[i];		//异或3次和异或1次的结果是一样的
 
-	       	//对于ones和twos把出现了3次的位置设置为0（取反之后1的位置为0）
+			//对于ones和twos把出现了3次的位置设置为0（取反之后1的位置为0）
 	        threes = ones & twos;
 	        ones &= ~threes;
 	        twos &= ~threes;
