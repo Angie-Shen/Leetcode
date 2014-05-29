@@ -17,8 +17,9 @@ where each number must appear either three times or once. This will be the ith b
 A straightforward implementation is to use an array of size 32 to keep track of the total count of ith bit. 
 一个直接的实现就是用大小为32的数组来记录所有位上的和。
 
-Reference:	http://www.acmerblog.com/leetcode-single-number-ii-5394.html
-			https://oj.leetcode.com/discuss/857/constant-space-solution
+Reference:
+http://www.acmerblog.com/leetcode-single-number-ii-5394.html
+https://oj.leetcode.com/discuss/857/constant-space-solution
 
 解法1：
 int singleNumber(int A[], int n) {
@@ -71,7 +72,6 @@ When the ith bit had appeared for the third time, clear the ith bit of both ones
 	    for (int i = 0; i < n; i++) {
 			twos |= ones & A[i];
 			ones ^= A[i];		//异或3次和异或1次的结果是一样的
-
 			//对于ones和twos把出现了3次的位置设置为0（取反之后1的位置为0）
 	        threes = ones & twos;
 	        ones &= ~threes;
